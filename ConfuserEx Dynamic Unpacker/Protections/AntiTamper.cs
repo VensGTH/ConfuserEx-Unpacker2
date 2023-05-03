@@ -30,7 +30,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             cctor = module.GlobalType.FindStaticConstructor();
             antitamp = cctor.Body.Instructions[0].Operand as MethodDef;
             if (antitamp == null) return null;
-            IList<ImageSectionHeader> imageSectionHeaders = module.MetaData.PEImage.ImageSectionHeaders;
+            IList<ImageSectionHeader> imageSectionHeaders = module.Metadata.PEImage.ImageSectionHeaders;
             ImageSectionHeader confSec = imageSectionHeaders[0];
             FindInitialKeys(antitamp);
             if (initialKeys == null) return null;
@@ -63,13 +63,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
         }
         public static bool? IsTampered(ModuleDefMD module)
         {
-            var sections = module.MetaData.PEImage.ImageSectionHeaders;
-
-            if (sections.Count == 3)
-            {
-
-                return false;
-            }
+            var sections = module.Metadata.PEImage.ImageSectionHeaders;
 
             foreach (var section in sections)
             {

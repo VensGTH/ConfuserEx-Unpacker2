@@ -28,41 +28,31 @@ namespace ConfuserEx_Dynamic_Unpacker
             if (path == null||mode == null)
             {
                 Console.WriteLine("Check args make sure path and either -d or -s is included (Dynamic or static)"); Console.ReadLine(); return;
-            }
-                
+            }              
             module = ModuleDefMD.Load(path);
-            
-           
-          
             if(mode.ToLower() == "static")
             {
-                staticRoute();
-               
+                staticRoute();               
             }
             else if(mode.ToLower() == "dynamic")
             {
                 asm = Assembly.LoadFrom(path);
-                dynamicRoute();
-             
+                dynamicRoute();             
             }
             else
             {
                 Console.Write("Yeah erm you might be a bit of an idiot follow the instructions");
                 Console.ReadLine();
                 return;
-            }
-           
-           
+            }                    
             ModuleWriterOptions writerOptions = new ModuleWriterOptions(module);
-            writerOptions.MetaDataOptions.Flags |= MetaDataFlags.PreserveAll;
-            writerOptions.Logger = DummyLogger.NoThrowInstance;
-            
+            writerOptions.MetadataOptions.Flags |= MetadataFlags.PreserveAll;
+            writerOptions.Logger = DummyLogger.NoThrowInstance;            
             module.Write(path + "Cleaned.exe",writerOptions);
             Console.ReadLine();
         }
         static void staticRoute()
-        {
-            
+        {         
             antitamper();
             Protections.ControlFlowRun.cleaner(module);
             Staticpacker();
@@ -75,7 +65,6 @@ namespace ConfuserEx_Dynamic_Unpacker
                 Console.WriteLine("[!] Decrytping Strings");
                 int strings = Protections.StaticStrings.Run(module);
                 Console.WriteLine("[!] Amount Of Strings Decrypted: " + strings);
-
             }
             catch
             {
@@ -195,7 +184,7 @@ namespace ConfuserEx_Dynamic_Unpacker
 
                     byte[] rawbytes = null;
 
-                    var htdgfd = (module).MetaData.PEImage.CreateFullStream();
+                    var htdgfd = (module).Metadata.PEImage.CreateReader();// .CreateFullStream();
 
                     rawbytes = htdgfd.ReadBytes((int)htdgfd.Length);
                     try

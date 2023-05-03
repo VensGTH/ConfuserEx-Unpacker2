@@ -1,5 +1,6 @@
 ﻿using dnlib.DotNet;
 using dnlib.DotNet.Emit;
+using dnlib.DotNet.MD;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,14 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
         {
             
             // Thanks to 0xd4d https://github.com/0xd4d/dnlib/issues/72
-            for (uint rid = 1; rid <= module.MetaData.TablesStream.FileTable.Rows; rid++)
+            for (uint rid = 1; rid <= module.Metadata.TablesStream.FileTable.Rows; rid++)
             {
-                var row = module.TablesStream.ReadFileRow(rid);
+                RawFileRow row = new RawFileRow();
+                if (!module.TablesStream.TryReadFileRow(rid, out row))
+                {
+                    continue;
+                }
+
                 string name = module.StringsStream.ReadNoNull(row.Name);
                 if (name!="koi") continue;
                 
@@ -30,6 +36,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
         }
         private static byte[] initialValue;
         public static int epToken;
+        private static object row;
 
         private static void arrayFinder(Local loc)
         {

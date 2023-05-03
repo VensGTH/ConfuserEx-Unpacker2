@@ -29,7 +29,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             if (val3 == 0)
                 return 0;
             smethod_1(val, val2, val3);
-            FindString(module);
+            FindString(module, module.Types);
             return StringsDecrypted;
         }
         public static MethodDef firstStep(ModuleDefMD module)
@@ -79,19 +79,10 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             {
                 if (method.Body.Instructions[y].OpCode == OpCodes.Call)
                 {
-
                     C.Add(method.Body.Instructions[y]);
-
-
-
                 }
-
             }
             return SortList();
-
-
-
-
         }
         public static bool SortList()
         {
@@ -111,7 +102,6 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             {
                 foreach (MethodDef method in type.Methods)
                 {
-
                     if (!method.HasBody) continue;
                     if (!method.IsConstructor) continue;
                     if (!method.FullName.ToLower().Contains("module")) continue;
@@ -130,13 +120,9 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                                         if (initMethod.Body.Instructions[y - 1].GetLdcI4Value() == 0) continue;
                                         else
                                             return (uint)initMethod.Body.Instructions[y - 1].GetLdcI4Value();
-
-
-
                                     }
                                 }
                             }
-
                         }
                     }
                 }
@@ -144,18 +130,24 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             return 0;
         }
 
-        public static void FindString(ModuleDefMD module)
+        public static void FindString(ModuleDefMD module, IList<TypeDef> types)
         {
-            foreach (TypeDef type in module.Types)
+            foreach (TypeDef type in types)
             {
+                // a little recursion: Zend
+                if (type.NestedTypes.Count>0)                FindString(module,type.NestedTypes);
+
+                Console.WriteLine(string.Format("Analysing Type {0:X} contains methods : {1:X}", type.MDToken.Raw, type.Methods.Count));
                 foreach (MethodDef method in type.Methods)
                 {
+                    Console.WriteLine(string.Format("   Method {0:X}", method.MDToken.Raw));
                     if (!method.HasBody) continue;
 
                     for (int i = 0; i < method.Body.Instructions.Count; i++)
                     {
                         if (i < 1) continue;
-                        if (method.Body.Instructions[i].OpCode == OpCodes.Call && method.Body.Instructions[i - 1].IsLdcI4())
+                        // must be Call to Decryptor
+                        if((method.Body.Instructions[i].OpCode == OpCodes.Call )&& method.Body.Instructions[i - 1].IsLdcI4())
                         {
                             try
                             {
@@ -180,7 +172,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                                 }
 
                             }
-                            catch(Exception ex)
+                            catch (Exception ex)
                             {
 
                             }
@@ -251,7 +243,6 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             {
                 foreach (MethodDef method in type.Methods)
                 {
-
                     if (!method.HasBody) continue;
                     if (!method.IsConstructor) continue;
                     if (!method.FullName.ToLower().Contains("module")) continue;
@@ -310,11 +301,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                                 {
                                     if (initMethod.Body.Instructions[y - 2].OpCode == OpCodes.Ldtoken)
                                     {
-
                                         return (string)initMethod.Body.Instructions[y - 2].Operand.ToString();
-
-
-
                                     }
                                 }
                             }
@@ -408,7 +395,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             byte_0 = smethod_0(array4);
         }
 
-       
+
         internal static byte[] smethod_0(byte[] byte_1)
         {
             MemoryStream memoryStream = new MemoryStream(byte_1);
@@ -905,7 +892,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                     {
                         num = (num << 1 | this.struct0_0[(int)((UIntPtr)num)].method_1(class0_0));
                     }
-                    IL_5E:
+                IL_5E:
                     return (byte)num;
                 }
 
