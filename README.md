@@ -13,7 +13,7 @@ Currently fixed string decoding in **Nested** types. The original code ignored t
 
 # Usage
 
-Original usage from author, I'll change if there will be any changes:
+Original usage from the author, I'll change if there will be any changes:
 
 ```
 when using this you there are 2 compulsary commands

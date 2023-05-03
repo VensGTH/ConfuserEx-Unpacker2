@@ -16,10 +16,8 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
 
         public static void DeobfuscateCflow(MethodDef meth)
         {
-
             for (int i = 0; i < 2; i++)
             {
-
                 CfDeob = new BlocksCflowDeobfuscator();
                 Blocks blocks = new Blocks(meth);
                 List<Block> test = blocks.MethodBlocks.GetAllBlocks();
@@ -30,23 +28,17 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                 blocks.Method.Body.SimplifyBranches();
                 blocks.Method.Body.OptimizeBranches();
                 CfDeob.Initialize(blocks);
-                //CfDeob.Deobfuscate();
+                // CfDeob.Deobfuscate();
                 CfDeob.Add(new ControlFlow());
 
                 // CfDeob.Add(new Cflow());
                 CfDeob.Deobfuscate();
                 blocks.RepartitionBlocks();
 
-
                 IList<Instruction> instructions;
                 IList<ExceptionHandler> exceptionHandlers;
                 blocks.GetCode(out instructions, out exceptionHandlers);
                 DotNetUtils.RestoreBody(meth, instructions, exceptionHandlers);
-
-
-
-
-
             }
         }
         public static bool hasCflow(dnlib.DotNet.MethodDef methods)
@@ -66,7 +58,8 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             {
                 foreach (MethodDef methods in types.Methods)
                 {
-                    if (!methods.HasBody) continue;
+                    if (!methods.HasBody)
+                        continue;
 
                     if (hasCflow(methods))
                     {
@@ -76,15 +69,11 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                             Console.Write("Cleaning Control Flow for " + methods.FullName + "\nThe case order is: ");
                             Console.ForegroundColor = ConsoleColor.Green;
                         }
-                            
-                        
+
                         DeobfuscateCflow(methods);
-                        if(Program.veryVerbose)
+                        if (Program.veryVerbose)
                             Console.WriteLine();
                     }
-
-
-
                 }
             }
         }

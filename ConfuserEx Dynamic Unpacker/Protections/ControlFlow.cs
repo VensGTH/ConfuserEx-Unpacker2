@@ -20,13 +20,9 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
         protected override bool Deobfuscate(Block block)
         {
 
-
-
-
             bool modified = false;
             if (block.LastInstr.OpCode == OpCodes.Switch)
             {
-
 
                 allVars = blocks.Method.Body.Variables;
                 isSwitchBlock(block);
@@ -34,29 +30,21 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                 {
                     ins.Initialize(blocks.Method);
                     modified |= Cleaner();
-
-
-
-
                 }
                 isExpressionBlock(block);
                 if (switchBlock != null || localSwitch != null)
                 {
-                    ins.Initialize(blocks.Method); modified |= Cleaner();
+                    ins.Initialize(blocks.Method);
+                    modified |= Cleaner();
                     while (Cleaner())
                     {
 
                         modified |= Cleaner();
                     }
-
-
-
-
                 }
             }
 
             return modified;
-
         }
         public InstructionEmulator ins = new InstructionEmulator();
         bool Cleaner()
@@ -69,7 +57,6 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                 {
                     allblocks.Add(block);
                 }
-
             }
             List<Block> targetBlocks = new List<Block>();
             targetBlocks = switchBlock.Targets;
@@ -83,10 +70,10 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                     if (Program.veryVerbose)
                     {
                         Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.Write(nextCase+",");
+                        Console.Write(nextCase + ",");
                         Console.ForegroundColor = ConsoleColor.Green;
                     }
-                        
+
                     block.ReplaceLastNonBranchWithBranch(0, targetBlocks[nextCase]);
                     replace(targetBlocks[nextCase], localValue);
 
@@ -102,7 +89,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                     if (Program.veryVerbose)
                     {
                         Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.Write(nextCase+",");
+                        Console.Write(nextCase + ",");
                         Console.ForegroundColor = ConsoleColor.Green;
                     }
                     block.ReplaceLastNonBranchWithBranch(0, targetBlocks[nextCase]);
@@ -126,8 +113,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                                 Console.ForegroundColor = ConsoleColor.Cyan;
                                 if (source == sources[0])
                                 {
-                                    Console.Write("True: "+nextCase + ",");
-
+                                    Console.Write("True: " + nextCase + ",");
                                 }
                                 else
                                 {
@@ -150,7 +136,8 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                         var instr = block.Instructions;
 
                         int l = instr.Count;
-                        if (!(instr[l - 4].IsLdcI4())) continue;
+                        if (!(instr[l - 4].IsLdcI4()))
+                            continue;
                         var sources = new List<Block>(block.Sources);
                         foreach (Block source in sources)
                         {
@@ -176,7 +163,6 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                                     if (source == sources[0])
                                     {
                                         Console.Write("True: " + nextCase + ",");
-
                                     }
                                     else
                                     {
@@ -200,7 +186,6 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                         }
                     }
                 }
-
             }
 
             return modified;
@@ -208,12 +193,14 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
         public bool replace(Block test, int locVal)
         {
 
-            //we replace the ldloc values with the correct ldc value 
+            // we replace the ldloc values with the correct ldc value
             if (test.IsConditionalBranch())
             {
-                //if it happens to be a conditional block then the ldloc wont be in the current block it will be in the fallthrough block
-                //normally the fallthrough block is the switch block but then fallthrough again you get the correct block you need to replace
-                //however this bit i dont really understand as much but it works so what ever but sometimes the fallthrough block is the first fallthrough not the second so we just set it to the first
+                // if it happens to be a conditional block then the ldloc wont be in the current block it will be in the
+                // fallthrough block normally the fallthrough block is the switch block but then fallthrough again you
+                // get the correct block you need to replace however this bit i dont really understand as much but it
+                // works so what ever but sometimes the fallthrough block is the first fallthrough not the second so we
+                // just set it to the first
                 if (test.FallThrough.FallThrough == switchBlock)
                 {
 
@@ -222,18 +209,17 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                 else
                 {
                     test = test.FallThrough.FallThrough;
-
                 }
-
             }
-            if (test == switchBlock) return false;
+            if (test == switchBlock)
+                return false;
 
             for (int i = 0; i < test.Instructions.Count; i++)
             {
                 if (test.Instructions[i].Instruction.GetLocal(blocks.Method.Body.Variables) == localSwitch)
                 {
 
-                    //check to see if the local is the same as the one from the switch block and replace it
+                    // check to see if the local is the same as the one from the switch block and replace it
                     test.Instructions[i] = new Instr(Instruction.CreateLdcI4(locVal));
                     return true;
                 }
@@ -249,8 +235,8 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
         }
         bool isXor(Block block)
         {
-            //check to confirm it is indeed the correct block 
-            //credits to TheProxy for this method since mine wasnt as efficient 
+            // check to confirm it is indeed the correct block
+            // credits to TheProxy for this method since mine wasnt as efficient
             int l = block.Instructions.Count - 1;
             var instr = block.Instructions;
             if (l < 4)
@@ -266,24 +252,22 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             if (!instr[l - 4].IsLdcI4())
                 return false;
 
-
             return true;
         }
-        #region detectSwitches
+#region detectSwitches
         void isExpressionBlock(Block block)
         {
             if (block.Instructions.Count < 7)
                 return;
             if (!block.FirstInstr.IsStloc())
                 return;
-            //we check to see if the switch block is confuserex cflow expression
+            // we check to see if the switch block is confuserex cflow expression
 
             switchBlock = block;
-            //set the local to a variable to compare to later
-            localSwitch = Instr.GetLocalVar(blocks.Method.Body.Variables.Locals, block.Instructions[block.Instructions.Count - 4]);
+            // set the local to a variable to compare to later
+            localSwitch = Instr.GetLocalVar(blocks.Method.Body.Variables.Locals,
+                                            block.Instructions[block.Instructions.Count - 4]);
             return;
-
-
         }
         void isNative(Block block)
         {
@@ -295,7 +279,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             switchBlock = block;
             native = true;
 
-            //set the local to a variable to compare to later
+            // set the local to a variable to compare to later
             localSwitch = Instr.GetLocalVar(allVars, block.Instructions[block.Instructions.Count - 4]);
             return;
         }
@@ -305,10 +289,10 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                 return;
             if (!block.FirstInstr.IsLdcI4())
                 return;
-            //check to see if its confuserex switch block
+            // check to see if its confuserex switch block
             isolder = true;
             switchBlock = block;
-            //set the local to a variable to compare to later
+            // set the local to a variable to compare to later
             //  localSwitch = Instr.GetLocalVar(allVars, block.Instructions[block.Instructions.Count - 4]);
             return;
         }
@@ -318,11 +302,11 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                 return;
             if (block.FirstInstr.OpCode != OpCodes.Call)
                 return;
-            //check to see if its confuserex switch block
+            // check to see if its confuserex switch block
             isolder = true;
             switchBlock = block;
             native = true;
-            //set the local to a variable to compare to later
+            // set the local to a variable to compare to later
             //  localSwitch = Instr.GetLocalVar(allVars, block.Instructions[block.Instructions.Count - 4]);
             return;
         }
@@ -332,10 +316,10 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                 return;
             if (!block.FirstInstr.IsStloc())
                 return;
-            //check to see if its confuserex switch block
+            // check to see if its confuserex switch block
             isolder = true;
             switchBlock = block;
-            //set the local to a variable to compare to later
+            // set the local to a variable to compare to later
             //  localSwitch = Instr.GetLocalVar(allVars, block.Instructions[block.Instructions.Count - 4]);
             return;
         }
@@ -346,17 +330,13 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                 return;
             if (!block.FirstInstr.IsLdcI4())
                 return;
-            //check to see if its confuserex switch block
+            // check to see if its confuserex switch block
 
             switchBlock = block;
-            //set the local to a variable to compare to later
+            // set the local to a variable to compare to later
             localSwitch = Instr.GetLocalVar(allVars, block.Instructions[block.Instructions.Count - 4]);
             return;
-
-
-
-
         }
-        #endregion;
+#endregion;
     }
 }

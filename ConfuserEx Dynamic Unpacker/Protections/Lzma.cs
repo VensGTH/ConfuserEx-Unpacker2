@@ -128,7 +128,8 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                 return num2;
             }
 
-            public static uint ReverseDecode(Lzma.BitDecoder[] Models, uint startIndex, Lzma.Decoder rangeDecoder, int NumBitLevels)
+            public static uint ReverseDecode(Lzma.BitDecoder[] Models, uint startIndex, Lzma.Decoder rangeDecoder,
+                                             int NumBitLevels)
             {
                 uint num = 1;
                 uint num2 = 0;
@@ -255,7 +256,8 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                         byte @byte = this.m_OutWindow.GetByte(0);
                         if (!state.IsCharState())
                         {
-                            num7 = this.m_LiteralDecoder.DecodeWithMatchByte(this.m_RangeDecoder, (uint)num5, @byte, this.m_OutWindow.GetByte(distance));
+                            num7 = this.m_LiteralDecoder.DecodeWithMatchByte(this.m_RangeDecoder, (uint)num5, @byte,
+                                                                             this.m_OutWindow.GetByte(distance));
                         }
                         else
                         {
@@ -272,7 +274,8 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                         {
                             if (this.m_IsRepG0Decoders[state.Index].Decode(this.m_RangeDecoder) == 0)
                             {
-                                if (this.m_IsRep0LongDecoders[(state.Index << 4) + posState].Decode(this.m_RangeDecoder) == 0)
+                                if (this.m_IsRep0LongDecoders[(state.Index << 4) + posState].Decode(
+                                        this.m_RangeDecoder) == 0)
                                 {
                                     state.UpdateShortRep();
                                     this.m_OutWindow.PutByte(this.m_OutWindow.GetByte(distance));
@@ -320,7 +323,8 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                                 distance = (uint)((2 | (num12 & 1)) << (numBitLevels & 0x1f));
                                 if (num12 < 14)
                                 {
-                                    distance += Lzma.BitTreeDecoder.ReverseDecode(this.m_PosDecoders, (distance - num12) - 1, this.m_RangeDecoder, numBitLevels);
+                                    distance += Lzma.BitTreeDecoder.ReverseDecode(
+                                        this.m_PosDecoders, (distance - num12) - 1, this.m_RangeDecoder, numBitLevels);
                                 }
                                 else
                                 {
@@ -333,7 +337,8 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                                 distance = num12;
                             }
                         }
-                        if (((distance >= num5) || (distance >= this.m_DictionarySizeCheck)) && (distance == uint.MaxValue))
+                        if (((distance >= num5) || (distance >= this.m_DictionarySizeCheck)) &&
+                            (distance == uint.MaxValue))
                         {
                             break;
                         }
@@ -488,7 +493,8 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
 
                 public void Create(int numPosBits, int numPrevBits)
                 {
-                    if (((this.m_Coders == null) || (this.m_NumPrevBits != numPrevBits)) || (this.m_NumPosBits != numPosBits))
+                    if (((this.m_Coders == null) || (this.m_NumPrevBits != numPrevBits)) ||
+                        (this.m_NumPosBits != numPosBits))
                     {
                         this.m_NumPosBits = numPosBits;
                         this.m_PosMask = (uint)((((int)1) << numPosBits) - 1);
@@ -514,7 +520,8 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
 
                 private uint GetState(uint pos, byte prevByte)
                 {
-                    return (((pos & this.m_PosMask) << this.m_NumPrevBits) + ((uint)(prevByte >> (8 - this.m_NumPrevBits))));
+                    return (((pos & this.m_PosMask) << this.m_NumPrevBits) +
+                            ((uint)(prevByte >> (8 - this.m_NumPrevBits))));
                 }
 
                 public void Init()
@@ -549,8 +556,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                         do
                         {
                             index = (index << 1) | this.m_Decoders[index].Decode(rangeDecoder);
-                        }
-                        while (index < 0x100);
+                        } while (index < 0x100);
                         return (byte)index;
                     }
 
@@ -561,7 +567,8 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                         {
                             uint num2 = (uint)((matchByte >> 7) & 1);
                             matchByte = (byte)(matchByte << 1);
-                            uint num3 = this.m_Decoders[(int)((IntPtr)(((1 + num2) << 8) + index))].Decode(rangeDecoder);
+                            uint num3 =
+                                this.m_Decoders[(int)((IntPtr)(((1 + num2) << 8) + index))].Decode(rangeDecoder);
                             index = (index << 1) | num3;
                             if (num2 != num3)
                             {
@@ -571,8 +578,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                                 }
                                 break;
                             }
-                        }
-                        while (index < 0x100);
+                        } while (index < 0x100);
                         return (byte)index;
                     }
                 }

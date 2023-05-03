@@ -38,7 +38,6 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             }
             junkMethods.Clear();
             bool flag2 = num > 0;
-
         }
 
         public static int ProxyFixer(ModuleDefMD module)
@@ -48,7 +47,8 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             {
                 foreach (MethodDef method in type.Methods)
                 {
-                    if (!method.HasBody) continue;
+                    if (!method.HasBody)
+                        continue;
                     for (int i = 0; i < method.Body.Instructions.Count; i++)
                     {
                         if (method.Body.Instructions[i].OpCode == OpCodes.Call)
@@ -102,14 +102,12 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                         opCode = OpCodes.Call;
                         result = method.Body.Instructions[i].Operand;
                         return result;
-
                     }
                     else if (method.Body.Instructions[i].OpCode == OpCodes.Newobj)
                     {
                         opCode = OpCodes.Newobj;
                         result = method.Body.Instructions[i].Operand;
                         return result;
-
                     }
                     else if (method.Body.Instructions[i].OpCode == OpCodes.Callvirt)
                     {
@@ -121,7 +119,6 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                     {
                         opCode = null;
                         result = null;
-
                     }
                 }
                 else
@@ -130,7 +127,6 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                 }
             }
             return result;
-
         }
     }
 }

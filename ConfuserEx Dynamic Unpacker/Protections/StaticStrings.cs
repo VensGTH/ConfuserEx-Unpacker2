@@ -38,16 +38,21 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             {
                 foreach (MethodDef method in type.Methods)
                 {
-                    if (!method.HasBody) continue;
-                    if (!method.IsConstructor) continue;
-                    if (!method.FullName.ToLower().Contains("module")) continue;
+                    if (!method.HasBody)
+                        continue;
+                    if (!method.IsConstructor)
+                        continue;
+                    if (!method.FullName.ToLower().Contains("module"))
+                        continue;
                     for (int i = 0; i < method.Body.Instructions.Count; i++)
                     {
                         if (method.Body.Instructions[i].OpCode == OpCodes.Call)
                         {
                             MethodDef initMethod = (MethodDef)method.Body.Instructions[i].Operand;
-                            if (!initMethod.HasBody) continue;
-                            if (initMethod.Body.Instructions.Count < 300) continue;
+                            if (!initMethod.HasBody)
+                                continue;
+                            if (initMethod.Body.Instructions.Count < 300)
+                                continue;
                             for (int y = 0; y < initMethod.Body.Instructions.Count; y++)
                             {
 
@@ -57,21 +62,18 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                                     {
                                         C.Clear();
                                         var grfds = dthfs(module, initMethod);
-                                        if (grfds == false) continue;
+                                        if (grfds == false)
+                                            continue;
                                         else
                                             return initMethod;
-
                                     }
                                 }
-
                             }
-
                         }
                     }
                 }
             }
             return null;
-
         }
         public static bool dthfs(ModuleDefMD module, MethodDef method)
         {
@@ -102,22 +104,27 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             {
                 foreach (MethodDef method in type.Methods)
                 {
-                    if (!method.HasBody) continue;
-                    if (!method.IsConstructor) continue;
-                    if (!method.FullName.ToLower().Contains("module")) continue;
+                    if (!method.HasBody)
+                        continue;
+                    if (!method.IsConstructor)
+                        continue;
+                    if (!method.FullName.ToLower().Contains("module"))
+                        continue;
                     for (int i = 0; i < method.Body.Instructions.Count; i++)
                     {
                         if (method.Body.Instructions[i].OpCode == OpCodes.Call)
                         {
                             MethodDef initMethod = (MethodDef)method.Body.Instructions[i].Operand;
-                            if (!(initMethod == correct)) continue;
+                            if (!(initMethod == correct))
+                                continue;
                             for (int y = 0; y < initMethod.Body.Instructions.Count; y++)
                             {
                                 if (initMethod.Body.Instructions[y].OpCode == OpCodes.Stloc_3)
                                 {
                                     if (initMethod.Body.Instructions[y - 1].IsLdcI4())
                                     {
-                                        if (initMethod.Body.Instructions[y - 1].GetLdcI4Value() == 0) continue;
+                                        if (initMethod.Body.Instructions[y - 1].GetLdcI4Value() == 0)
+                                            continue;
                                         else
                                             return (uint)initMethod.Body.Instructions[y - 1].GetLdcI4Value();
                                     }
@@ -135,19 +142,24 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             foreach (TypeDef type in types)
             {
                 // a little recursion: Zend
-                if (type.NestedTypes.Count>0)                FindString(module,type.NestedTypes);
+                if (type.NestedTypes.Count > 0)
+                    FindString(module, type.NestedTypes);
 
-                Console.WriteLine(string.Format("Analysing Type {0:X} contains methods : {1:X}", type.MDToken.Raw, type.Methods.Count));
+                Console.WriteLine(string.Format("Analysing Type {0:X} contains methods : {1:X}", type.MDToken.Raw,
+                                                type.Methods.Count));
                 foreach (MethodDef method in type.Methods)
                 {
                     Console.WriteLine(string.Format("   Method {0:X}", method.MDToken.Raw));
-                    if (!method.HasBody) continue;
+                    if (!method.HasBody)
+                        continue;
 
                     for (int i = 0; i < method.Body.Instructions.Count; i++)
                     {
-                        if (i < 1) continue;
+                        if (i < 1)
+                            continue;
                         // must be Call to Decryptor
-                        if((method.Body.Instructions[i].OpCode == OpCodes.Call )&& method.Body.Instructions[i - 1].IsLdcI4())
+                        if ((method.Body.Instructions[i].OpCode == OpCodes.Call) &&
+                            method.Body.Instructions[i - 1].IsLdcI4())
                         {
                             try
                             {
@@ -164,24 +176,20 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                                         if (Program.veryVerbose)
                                         {
                                             Console.ForegroundColor = ConsoleColor.Cyan;
-                                            Console.WriteLine(string.Format("Encrypted String Found In Method {0} With Param of {1} the decrypted string is {2}", method.Name, param.ToString(), DecryptedStringValue));
+                                            Console.WriteLine(string.Format(
+                                                "Encrypted String Found In Method {0} With Param of {1} the decrypted string is {2}",
+                                                method.Name, param.ToString(), DecryptedStringValue));
                                             Console.ForegroundColor = ConsoleColor.Green;
                                         }
                                         StringsDecrypted++;
                                     }
                                 }
-
                             }
                             catch (Exception ex)
                             {
-
                             }
-
-
-
                         }
                     }
-
                 }
             }
         }
@@ -192,15 +200,18 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             {
                 foreach (MethodDef method in type.Methods)
                 {
-                    if (!method.HasBody) continue;
-                    if (!(method.FullName.Contains(decryption.Name))) continue;
+                    if (!method.HasBody)
+                        continue;
+                    if (!(method.FullName.Contains(decryption.Name)))
+                        continue;
                     for (int y = 0; y < method.Body.Instructions.Count; y++)
                     {
                         if (method.Body.Instructions[y].OpCode == OpCodes.Mul)
                         {
                             if (method.Body.Instructions[y - 1].IsLdcI4() && method.Body.Instructions[y + 1].IsLdcI4())
-                                return smethod_6<string>((uint)param, (uint)method.Body.Instructions[y - 1].GetLdcI4Value(), (uint)method.Body.Instructions[y + 1].GetLdcI4Value());
-
+                                return smethod_6<string>((uint)param,
+                                                         (uint)method.Body.Instructions[y - 1].GetLdcI4Value(),
+                                                         (uint)method.Body.Instructions[y + 1].GetLdcI4Value());
                         }
                     }
                 }
@@ -218,19 +229,26 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             num = 3;
             if ((ulong)num == 3uL)
             {
-                int count = (int)byte_0[(int)((UIntPtr)(uint_0++))] | (int)byte_0[(int)((UIntPtr)(uint_0++))] << 8 | (int)byte_0[(int)((UIntPtr)(uint_0++))] << 16 | (int)byte_0[(int)((UIntPtr)(uint_0++))] << 24;
+                int count = (int)byte_0[(int)((UIntPtr)(uint_0++))] | (int)byte_0[(int)((UIntPtr)(uint_0++))] << 8 |
+                            (int)byte_0[(int)((UIntPtr)(uint_0++))] << 16 |
+                            (int)byte_0[(int)((UIntPtr)(uint_0++))] << 24;
                 result = (T)((object)string.Intern(Encoding.UTF8.GetString(byte_0, (int)uint_0, count)));
             }
             else if ((ulong)num == 2uL)
             {
                 T[] array = new T[1];
-                Buffer.BlockCopy(byte_0, (int)uint_0, array, 0, System.Runtime.InteropServices.Marshal.SizeOf(default(T)));
+                Buffer.BlockCopy(byte_0, (int)uint_0, array, 0,
+                                 System.Runtime.InteropServices.Marshal.SizeOf(default(T)));
                 result = array[0];
             }
             else if ((ulong)num == 0uL)
             {
-                int num2 = (int)byte_0[(int)((UIntPtr)(uint_0++))] | (int)byte_0[(int)((UIntPtr)(uint_0++))] << 8 | (int)byte_0[(int)((UIntPtr)(uint_0++))] << 16 | (int)byte_0[(int)((UIntPtr)(uint_0++))] << 24;
-                int length = (int)byte_0[(int)((UIntPtr)(uint_0++))] | (int)byte_0[(int)((UIntPtr)(uint_0++))] << 8 | (int)byte_0[(int)((UIntPtr)(uint_0++))] << 16 | (int)byte_0[(int)((UIntPtr)(uint_0++))] << 24;
+                int num2 = (int)byte_0[(int)((UIntPtr)(uint_0++))] | (int)byte_0[(int)((UIntPtr)(uint_0++))] << 8 |
+                           (int)byte_0[(int)((UIntPtr)(uint_0++))] << 16 |
+                           (int)byte_0[(int)((UIntPtr)(uint_0++))] << 24;
+                int length = (int)byte_0[(int)((UIntPtr)(uint_0++))] | (int)byte_0[(int)((UIntPtr)(uint_0++))] << 8 |
+                             (int)byte_0[(int)((UIntPtr)(uint_0++))] << 16 |
+                             (int)byte_0[(int)((UIntPtr)(uint_0++))] << 24;
                 Array array2 = Array.CreateInstance(typeof(T).GetElementType(), length);
                 Buffer.BlockCopy(byte_0, (int)uint_0, array2, 0, num2 - 4);
                 result = (T)((object)array2);
@@ -243,15 +261,19 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             {
                 foreach (MethodDef method in type.Methods)
                 {
-                    if (!method.HasBody) continue;
-                    if (!method.IsConstructor) continue;
-                    if (!method.FullName.ToLower().Contains("module")) continue;
+                    if (!method.HasBody)
+                        continue;
+                    if (!method.IsConstructor)
+                        continue;
+                    if (!method.FullName.ToLower().Contains("module"))
+                        continue;
                     for (int i = 0; i < method.Body.Instructions.Count; i++)
                     {
                         if (method.Body.Instructions[i].OpCode == OpCodes.Call)
                         {
                             MethodDef initMethod = (MethodDef)method.Body.Instructions[i].Operand;
-                            if (!(initMethod == correct)) continue;
+                            if (!(initMethod == correct))
+                                continue;
                             for (int y = 0; y < initMethod.Body.Instructions.Count; y++)
                             {
                                 if (initMethod.Body.Instructions[y].OpCode == OpCodes.Stloc_0)
@@ -260,22 +282,17 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                                     {
                                         if (initMethod.Body.Instructions[y - 1].GetLdcI4Value() == 0)
                                         {
-
                                         }
                                         else
                                         {
                                             return (uint)initMethod.Body.Instructions[y - 1].GetLdcI4Value();
                                         }
-
-
                                     }
                                 }
                             }
-
                         }
                     }
                 }
-
             }
             return 0;
         }
@@ -285,16 +302,19 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             {
                 foreach (MethodDef method in type.Methods)
                 {
-
-                    if (!method.HasBody) continue;
-                    if (!method.IsConstructor) continue;
-                    if (!method.FullName.ToLower().Contains("module")) continue;
+                    if (!method.HasBody)
+                        continue;
+                    if (!method.IsConstructor)
+                        continue;
+                    if (!method.FullName.ToLower().Contains("module"))
+                        continue;
                     for (int i = 0; i < method.Body.Instructions.Count; i++)
                     {
                         if (method.Body.Instructions[i].OpCode == OpCodes.Call)
                         {
                             MethodDef initMethod = (MethodDef)method.Body.Instructions[i].Operand;
-                            if (!(initMethod == correct)) continue;
+                            if (!(initMethod == correct))
+                                continue;
                             for (int y = 0; y < initMethod.Body.Instructions.Count; y++)
                             {
                                 if (initMethod.Body.Instructions[y].OpCode == OpCodes.Stloc_1)
@@ -305,14 +325,11 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                                     }
                                 }
                             }
-
                         }
                     }
                 }
-
             }
             return null;
-
         }
         public static uint[] getArray(ModuleDefMD module, string fieldName)
         {
@@ -320,22 +337,25 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             {
                 foreach (FieldDef fields in type.Fields)
                 {
-                    if (!fieldName.ToLower().Contains(fields.Name.ToLower())) continue;
-                    if (!fields.HasFieldRVA) continue;
-                    if (!(fields.InitialValue.Length != 0)) continue;
-                    if (!fields.FullName.ToLower().Contains("module")) continue;
-                    if (!fields.IsStatic) continue;
-                    if (!fields.IsAssembly) continue;
+                    if (!fieldName.ToLower().Contains(fields.Name.ToLower()))
+                        continue;
+                    if (!fields.HasFieldRVA)
+                        continue;
+                    if (!(fields.InitialValue.Length != 0))
+                        continue;
+                    if (!fields.FullName.ToLower().Contains("module"))
+                        continue;
+                    if (!fields.IsStatic)
+                        continue;
+                    if (!fields.IsAssembly)
+                        continue;
                     byte[] arrrr = fields.InitialValue;
                     uint[] decoded = new uint[arrrr.Length / 4];
                     Buffer.BlockCopy(arrrr, 0, decoded, 0, arrrr.Length);
                     return (uint[])decoded;
-
                 }
-
             }
             return null;
-
         }
 
         private static byte[] byte_0;
@@ -394,7 +414,6 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
 
             byte_0 = smethod_0(array4);
         }
-
 
         internal static byte[] smethod_0(byte[] byte_1)
         {
@@ -536,7 +555,8 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                     {
                         if (this.struct0_3[(int)((UIntPtr)@struct.uint_0)].method_1(this.class0_0) == 0u)
                         {
-                            if (this.struct0_1[(int)((UIntPtr)((@struct.uint_0 << 4) + num6))].method_1(this.class0_0) == 0u)
+                            if (this.struct0_1[(int)((UIntPtr)((@struct.uint_0 << 4) + num6))].method_1(
+                                    this.class0_0) == 0u)
                             {
                                 @struct.method_4();
                                 this.class4_0.method_5(this.class4_0.method_6(num));
@@ -864,8 +884,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                     do
                     {
                         num = (num << 1 | this.struct0_0[(int)((UIntPtr)num)].method_1(class0_0));
-                    }
-                    while (num < 256u);
+                    } while (num < 256u);
                     return (byte)num;
                 }
 
