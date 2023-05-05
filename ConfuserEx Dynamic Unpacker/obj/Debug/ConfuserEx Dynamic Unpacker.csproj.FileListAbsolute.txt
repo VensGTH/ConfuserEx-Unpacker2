@@ -20,3 +20,16 @@ D:\backup8-6-17\docs\Visual Studio 2017\Projects\ConfuserEx Dynamic Unpacker\Con
 D:\backup8-6-17\docs\Visual Studio 2017\Projects\ConfuserEx Dynamic Unpacker\ConfuserEx Dynamic Unpacker\obj\Debug\ConfuserEx Dynamic Unpacker.csprojResolveAssemblyReference.cache
 D:\backup8-6-17\docs\Visual Studio 2017\Projects\ConfuserEx Dynamic Unpacker\ConfuserEx Dynamic Unpacker\obj\Debug\ConfuserEx Dynamic Unpacker.exe
 D:\backup8-6-17\docs\Visual Studio 2017\Projects\ConfuserEx Dynamic Unpacker\ConfuserEx Dynamic Unpacker\obj\Debug\ConfuserEx Dynamic Unpacker.pdb
+E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\obj\Debug\ConfuserEx Dynamic Unpacker.csproj.AssemblyReference.cache
+E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\obj\Debug\ConfuserEx Dynamic Unpacker.csproj.SuggestedBindingRedirects.cache
+E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\obj\Debug\ConfuserEx Dynamic Unpacker.csproj.CoreCompileInputs.cache
+E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\bin\Debug\ConfuserEx Dynamic Unpacker.exe.config
+E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\bin\Debug\ConfuserEx Dynamic Unpacker.exe
+E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\bin\Debug\ConfuserEx Dynamic Unpacker.pdb
+E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\bin\Debug\dnlib.dll
+E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\bin\Debug\de4dot.blocks.pdb
+E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\bin\Debug\dnlib.pdb
+E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\bin\Debug\dnlib.xml
+E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\obj\Debug\ConfuserEx Dynamic Unpacker.csproj.CopyComplete
+E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\obj\Debug\ConfuserEx Dynamic Unpacker.exe
+E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\obj\Debug\ConfuserEx Dynamic Unpacker.pdb
