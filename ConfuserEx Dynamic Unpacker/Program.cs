@@ -74,10 +74,9 @@ class Program
             int strings = Protections.StaticStrings.Run(module);
             Console.WriteLine("[!] Amount Of Strings Decrypted: " + strings);
         }
-        catch
+        catch (Exception ex)
         {
-            Console.WriteLine(
-                "error happened somewhere apart from tamper and packer im too lazy to implement proper error handling");
+            Console.WriteLine("error happened " + ex.ToString());
         }
     }
     static void dynamicRoute()
@@ -99,15 +98,16 @@ class Program
             var szFileName = Path.GetTempFileName();
             module.Write(szFileName, writerOptions);
             // load assemblies:
-            asm = Assembly.LoadFrom(szFileName);
+            asm = /* Assembly.LoadFrom(szFileName);  -- can't unload file */
+                Assembly.Load(File.ReadAllBytes(szFileName));
             int strings = Protections.Constants.constants(module, module.Types);
             Console.WriteLine("[!] Amount Of Strings Decrypted: " + strings);
+
             File.Delete(szFileName);
         }
-        catch
+        catch (Exception ex)
         {
-            Console.WriteLine(
-                "error happened somewhere apart from tamper and packer im too lazy to implement proper error handling");
+            Console.WriteLine("error happened " + ex.ToString());
         }
     }
     static void optionParser(string[] str)
