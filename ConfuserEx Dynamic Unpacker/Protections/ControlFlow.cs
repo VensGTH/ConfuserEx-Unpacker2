@@ -191,7 +191,6 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                 // just set it to the first
                 if (test.FallThrough.FallThrough == switchBlock)
                 {
-
                     test = test.FallThrough;
                 }
                 else
@@ -206,7 +205,6 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             {
                 if (test.Instructions[i].Instruction.GetLocal(blocks.Method.Body.Variables) == localSwitch)
                 {
-
                     // check to see if the local is the same as the one from the switch block and replace it
                     test.Instructions[i] = new Instr(Instruction.CreateLdcI4(locVal));
                     return true;
@@ -259,7 +257,6 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
         }
         void isNative(Block block)
         {
-
             if (block.Instructions.Count <= 5)
                 return;
             if (block.FirstInstr.OpCode != OpCodes.Call)

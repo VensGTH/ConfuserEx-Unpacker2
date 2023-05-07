@@ -63,14 +63,14 @@ class Program
     static void staticRoute()
     {
         antitamper();
-        Protections.ControlFlowRun.cleaner(module, module.Types);
+        Protections.ControlFlowRun.cleaner(module, module.Types, false);
         Staticpacker();
         try
         {
             Console.WriteLine("[!] Cleaning Proxy Calls");
             int amountProxy = Protections.ReferenceProxy.ProxyFixer(module);
             Console.WriteLine("[!] Amount Of Proxy Calls Fixed: " + amountProxy);
-            Protections.ControlFlowRun.cleaner(module, module.Types);
+            Protections.ControlFlowRun.cleaner(module, module.Types, true);
             Console.WriteLine("[!] Decrytping Strings");
             int strings = Protections.StaticStrings.Run(module);
             Console.WriteLine("[!] Amount Of Strings Decrypted: " + strings);
@@ -84,14 +84,14 @@ class Program
     static void dynamicRoute()
     {
         antitamper();
-        Protections.ControlFlowRun.cleaner(module, module.Types);
+        Protections.ControlFlowRun.cleaner(module, module.Types, false);
         packer();
         try
         {
             Console.WriteLine("[!] Cleaning Proxy Calls");
             int amountProxy = Protections.ReferenceProxy.ProxyFixer(module);
             Console.WriteLine("[!] Amount Of Proxy Calls Fixed: " + amountProxy);
-            Protections.ControlFlowRun.cleaner(module, module.Types);
+            Protections.ControlFlowRun.cleaner(module, module.Types,true);
             Console.WriteLine("[!] Decrytping Strings");
             int strings = Protections.Constants.constants();
             Console.WriteLine("[!] Amount Of Strings Decrypted: " + strings);

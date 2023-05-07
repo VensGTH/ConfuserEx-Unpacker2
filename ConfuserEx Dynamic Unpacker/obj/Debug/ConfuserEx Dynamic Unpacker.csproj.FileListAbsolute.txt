@@ -27,7 +27,6 @@ E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\bin\Debug\ConfuserE
 E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\bin\Debug\ConfuserEx Dynamic Unpacker.exe
 E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\bin\Debug\ConfuserEx Dynamic Unpacker.pdb
 E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\bin\Debug\dnlib.dll
-E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\bin\Debug\de4dot.blocks.pdb
 E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\bin\Debug\dnlib.pdb
 E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\bin\Debug\dnlib.xml
 E:\PROGRAMMS\ConfuserEx-Unpacker\ConfuserEx Dynamic Unpacker\obj\Debug\ConfuserEx Dynamic Unpacker.csproj.CopyComplete
