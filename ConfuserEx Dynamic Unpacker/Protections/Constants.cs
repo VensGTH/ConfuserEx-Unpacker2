@@ -30,6 +30,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                     {
                         if (methods.Body.Instructions[i].OpCode == OpCodes.Call &&
                             methods.Body.Instructions[i].Operand.ToString().Contains("tring>") &&
+                            methods.Body.Instructions[i].Operand.ToString().Contains("odule>") &&
                             methods.Body.Instructions[i].Operand is MethodSpec)
                         {
                             if (i < 1)
@@ -39,18 +40,19 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                                 if (Program.veryVerbose)
                                 {
                                     Console.ForegroundColor = ConsoleColor.Cyan;
-                                    Console.WriteLine("processing {0:X} {1:D}", methods.MDToken.ToInt32(),
-                                                      methods.Name.Length);
+                                    Console.WriteLine("processing {0:X}:{1:D}" /* +
+                                                           methods.Body.Instructions[i].Operand.ToString() */
+                                                      ,
+                                                      methods.MDToken.ToInt32(), i);
                                     Console.ForegroundColor = ConsoleColor.Green;
                                 }
                                 MethodSpec methodSpec = methods.Body.Instructions[i].Operand as MethodSpec;
                                 uint param1 = (uint)methods.Body.Instructions[i - 1].GetLdcI4Value();
-                                MethodBase DecryptionMethod = Program.asm.ManifestModule
-                                    .ResolveMethod(methodSpec.MDToken.ToInt32());
+                                MethodBase DecryptionMethod =
+                                    Program.asm.ManifestModule.ResolveMethod(methodSpec.MDToken.ToInt32());
                                 var value = DecryptionMethod.Invoke(null, new object[] { (uint)param1 });
                                 if (value == null)
                                     continue;
-                                // Console.Write("value={0}, param1={1}", value, param1.ToString());
                                 methods.Body.Instructions[i].OpCode = OpCodes.Nop;
                                 methods.Body.Instructions[i - 1].OpCode = OpCodes.Ldstr;
                                 methods.Body.Instructions[i - 1].Operand = value;
