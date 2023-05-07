@@ -11,20 +11,17 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
 {
     class Constants
     {
-        /**
-        determines whether we have to call constructor of the type
-        before invoking decryption method
-        */
-        private static bool m_CallConstructorBeforeInvoke = true;
 
-        public static int constants()
+        public static int constants(ModuleDefMD module, IList<TypeDef> typesall)
         {
             int amount = 0;
-            var manifestModule = Program.asm.ManifestModule;
 
-            foreach (TypeDef types in Program.module.GetTypes())
+            foreach (TypeDef types in /*Program.module.GetTypes()*/ typesall)
             {
-                bool bConstucted = true;
+                // subclasses yet again:
+                if (types.NestedTypes.Count > 0)
+                    constants(module, types.NestedTypes);
+
                 foreach (MethodDef methods in types.Methods)
                 {
                     if (!methods.HasBody)
@@ -41,35 +38,15 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                             {
                                 if (Program.veryVerbose)
                                 {
-                                    Console.Write("processing {0:X} {1:D}", methods.MDToken.ToInt32(),
-                                                  methods.Name.Length);
+                                    Console.ForegroundColor = ConsoleColor.Cyan;
+                                    Console.WriteLine("processing {0:X} {1:D}", methods.MDToken.ToInt32(),
+                                                      methods.Name.Length);
+                                    Console.ForegroundColor = ConsoleColor.Green;
                                 }
                                 MethodSpec methodSpec = methods.Body.Instructions[i].Operand as MethodSpec;
                                 uint param1 = (uint)methods.Body.Instructions[i - 1].GetLdcI4Value();
-                                MethodBase DecryptionMethod =
-                                    manifestModule.ResolveMethod(methodSpec.MDToken.ToInt32());
-                                if (!bConstucted)
-                                {
-                                    bConstucted = true;
-                                    var ctor = types.FindMethod(".cctor");
-                                    if (ctor == null)
-                                    {
-                                        Console.Write("constructor not found for type {0:X}", types.MDToken.ToInt32());
-                                    }
-                                    else
-                                    {
-                                        if (Program.veryVerbose)
-                                        {
-                                            Console.Write("found constructor {0:X}", ctor.MDToken.ToInt32());
-                                            MethodBase ctor_method =
-                                                manifestModule.ResolveMethod(ctor.MDToken.ToInt32());
-                                            var g = new object[ctor.GetParamCount()];
-                                            if (g.Length != 0)
-                                                Console.Write("constructor requires params");
-                                            object r = ctor_method.Invoke(null, g);
-                                        }
-                                    }
-                                }
+                                MethodBase DecryptionMethod = Program.asm.ManifestModule
+                                    .ResolveMethod(methodSpec.MDToken.ToInt32());
                                 var value = DecryptionMethod.Invoke(null, new object[] { (uint)param1 });
                                 if (value == null)
                                     continue;

@@ -14,7 +14,7 @@ namespace ConfuserEx_Dynamic_Unpacker
 class Program
 {
     public static ModuleDefMD module;
-    public static Assembly asm;
+    public static Assembly asm = null;
 
     public static bool veryVerbose = false;
     private static string path = null;
@@ -39,7 +39,6 @@ class Program
         }
         else if (mode.ToLower() == "dynamic")
         {
-            asm = Assembly.LoadFrom(path);
             dynamicRoute();
         }
         else
@@ -91,10 +90,19 @@ class Program
             Console.WriteLine("[!] Cleaning Proxy Calls");
             int amountProxy = Protections.ReferenceProxy.ProxyFixer(module);
             Console.WriteLine("[!] Amount Of Proxy Calls Fixed: " + amountProxy);
-            Protections.ControlFlowRun.cleaner(module, module.Types,true);
+            Protections.ControlFlowRun.cleaner(module, module.Types, true);
             Console.WriteLine("[!] Decrytping Strings");
-            int strings = Protections.Constants.constants();
+            // save modified file:
+            ModuleWriterOptions writerOptions = new ModuleWriterOptions(module);
+            writerOptions.MetadataOptions.Flags |= MetadataFlags.PreserveAll;
+            writerOptions.Logger = DummyLogger.NoThrowInstance;
+            var szFileName = Path.GetTempFileName();
+            module.Write(szFileName, writerOptions);
+            // load assemblies:
+            asm = Assembly.LoadFrom(szFileName);
+            int strings = Protections.Constants.constants(module, module.Types);
             Console.WriteLine("[!] Amount Of Strings Decrypted: " + strings);
+            File.Delete(szFileName);
         }
         catch
         {

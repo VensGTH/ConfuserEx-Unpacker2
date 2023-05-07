@@ -41,8 +41,9 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                 DotNetUtils.RestoreBody(meth, instructions, exceptionHandlers);
             }
         }
-        static void stripCallCheck(Block block)
+        static bool stripCallCheck(Block block)
         {
+            bool bReplaced = false;
             var instrs = block.Instructions;
             for (int i = 0; i < instrs.Count; i++)
             {
@@ -78,6 +79,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                                         Console.WriteLine("Replace StackTrace::GetFrame");
                                         Console.ForegroundColor = ConsoleColor.Green;
                                     }
+                                    bReplaced = true;
                                     block.Replace(i, 1, Instruction.CreateLdcI4(777));
                                     block.Replace(i + 1, 1, OpCodes.Nop.ToInstruction());
                                     i += 2;
@@ -102,6 +104,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                                     Console.WriteLine("Replacing GetExecutingAssembly");
                                     Console.ForegroundColor = ConsoleColor.Green;
                                 }
+                                bReplaced = true;
                                 block.Replace(i, 1, instr.Instruction.Clone());
                                 i += 1;
                             }
@@ -110,26 +113,27 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                     }
                 }
             }
+            return bReplaced;
         } //..stripCallCheck
 
-        public static bool stripCallChecks(dnlib.DotNet.MethodDef methodDef)
+        public static void stripCallChecks(dnlib.DotNet.MethodDef methodDef)
         {
-            if (Program.veryVerbose)
-            {
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("Removing call checks for {0:X}", methodDef.MDToken.ToInt32());
-                Console.ForegroundColor = ConsoleColor.Green;
-            }
             var blocks = new Blocks(methodDef);
             foreach (var block in blocks.MethodBlocks.GetAllBlocks())
-                stripCallCheck(block);
-            // blocks.UpdateBlocks(); // ??
+                if (stripCallCheck(block))
+                {
+                    if (Program.veryVerbose)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine("Removed call checks for {0:X}", methodDef.MDToken.ToInt32());
+                        Console.ForegroundColor = ConsoleColor.Green;
+                    }
+                }
             IList<Instruction> instructions;
             IList<ExceptionHandler> exceptionHandlers;
             blocks.GetCode(out instructions, out exceptionHandlers);
             // reconstruct method
             DotNetUtils.RestoreBody(methodDef, instructions, exceptionHandlers);
-            return false;
         } //..stripCallChecks
 
         public static bool hasCflow(dnlib.DotNet.MethodDef methods)
@@ -157,6 +161,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                         continue;
                     if (!bExtra)
                         stripCallChecks(methods);
+                    //
                     if (hasCflow(methods))
                     {
                         if (Program.veryVerbose)
