@@ -93,6 +93,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
         {
             result = null;
             opCode = null;
+            if (null == method.Body) return result;
             for (int i = 0; i < method.Body.Instructions.Count; i++)
             {
                 if (method.Body.Instructions.Count <= 10)

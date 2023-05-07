@@ -17,13 +17,12 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
         private bool native;
         private bool isolder;
         public MethodDef currentMethod;
+        public InstructionEmulator ins = new InstructionEmulator();
         protected override bool Deobfuscate(Block block)
         {
-
             bool modified = false;
             if (block.LastInstr.OpCode == OpCodes.Switch)
             {
-
                 allVars = blocks.Method.Body.Variables;
                 isSwitchBlock(block);
                 if (switchBlock != null && localSwitch != null)
@@ -38,15 +37,12 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                     modified |= Cleaner();
                     while (Cleaner())
                     {
-
                         modified |= Cleaner();
                     }
                 }
             }
-
             return modified;
         }
-        public InstructionEmulator ins = new InstructionEmulator();
         bool Cleaner()
         {
             bool modified = false;
@@ -73,10 +69,8 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                         Console.Write(nextCase + ",");
                         Console.ForegroundColor = ConsoleColor.Green;
                     }
-
                     block.ReplaceLastNonBranchWithBranch(0, targetBlocks[nextCase]);
                     replace(targetBlocks[nextCase], localValue);
-
                     block.Instructions.Add(new Instr(new Instruction(OpCodes.Pop)));
                     modified = true;
                 }
@@ -94,7 +88,6 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                     }
                     block.ReplaceLastNonBranchWithBranch(0, targetBlocks[nextCase]);
                     replace(targetBlocks[nextCase], localValue);
-
                     block.Instructions.Add(new Instr(new Instruction(OpCodes.Pop)));
                     modified = true;
                 }
@@ -123,7 +116,6 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                             }
                             source.ReplaceLastNonBranchWithBranch(0, targetBlocks[nextCase]);
                             replace(targetBlocks[nextCase], localValue);
-
                             source.Instructions[1] = (new Instr(new Instruction(OpCodes.Pop)));
                             modified = true;
                         }
@@ -134,7 +126,6 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                     if (block.Instructions[block.Instructions.Count - 2].OpCode == OpCodes.Mul)
                     {
                         var instr = block.Instructions;
-
                         int l = instr.Count;
                         if (!(instr[l - 4].IsLdcI4()))
                             continue;
@@ -153,9 +144,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                                     instr.Insert(l - 4, new Instr(new Instruction(OpCodes.Ldc_I4, val1)));
                                     l++;
                                 }
-
                                 ins.Emulate(instr, l - 5, l);
-
                                 int nextCase = emulateCase(out int localValue);
                                 if (Program.veryVerbose)
                                 {
@@ -192,7 +181,6 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
         }
         public bool replace(Block test, int locVal)
         {
-
             // we replace the ldloc values with the correct ldc value
             if (test.IsConditionalBranch())
             {

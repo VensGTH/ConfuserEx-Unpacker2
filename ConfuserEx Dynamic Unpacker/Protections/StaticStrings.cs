@@ -177,8 +177,8 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
                                         {
                                             Console.ForegroundColor = ConsoleColor.Cyan;
                                             Console.WriteLine(string.Format(
-                                                "Encrypted String Found In Method {0} With Param of {1} the decrypted string is {2}",
-                                                method.Name, param.ToString(), DecryptedStringValue));
+                                                "Encrypted String Found In Method {0:X} With Param of {1} the decrypted string is {2}",
+                                                method.MDToken.ToInt32(), param.ToString(), DecryptedStringValue));
                                             Console.ForegroundColor = ConsoleColor.Green;
                                         }
                                         StringsDecrypted++;

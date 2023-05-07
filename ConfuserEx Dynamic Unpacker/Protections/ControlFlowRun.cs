@@ -52,24 +52,27 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             }
             return false;
         }
-        public static void cleaner(ModuleDefMD module)
+        public static void cleaner(ModuleDefMD module, IList<TypeDef> typesall)
         {
-            foreach (TypeDef types in module.GetTypes())
+            foreach (TypeDef types in typesall)
             {
+                // subclasses yet again:
+                if (types.NestedTypes.Count > 0)
+                    cleaner(module, types.NestedTypes);
+
                 foreach (MethodDef methods in types.Methods)
                 {
                     if (!methods.HasBody)
                         continue;
-
                     if (hasCflow(methods))
                     {
                         if (Program.veryVerbose)
                         {
                             Console.ForegroundColor = ConsoleColor.Cyan;
-                            Console.Write("Cleaning Control Flow for " + methods.FullName + "\nThe case order is: ");
+                            Console.Write("Cleaning Control Flow for {0:X}\nThe case order is: ",
+                                          methods.MDToken.ToInt32());
                             Console.ForegroundColor = ConsoleColor.Green;
                         }
-
                         DeobfuscateCflow(methods);
                         if (Program.veryVerbose)
                             Console.WriteLine();
