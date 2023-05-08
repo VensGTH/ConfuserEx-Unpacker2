@@ -20,7 +20,7 @@ namespace ConfuserEx_Dynamic_Unpacker.Protections
             {
                 // subclasses yet again:
                 if (types.NestedTypes.Count > 0)
-                    constants(module, types.NestedTypes);
+                    amount += constants(module, types.NestedTypes);
 
                 foreach (MethodDef methods in types.Methods)
                 {
