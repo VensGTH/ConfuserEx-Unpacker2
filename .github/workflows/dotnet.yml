@@ -27,13 +27,13 @@ jobs:
       uses: microsoft/setup-msbuild@v1.1
     
     - name: Restore Packages
-      run: nuget restore "ConfuserEx Unpacker/ConfuserEx Unpacker.sln"
+      run: nuget restore "ConfuserEx Dynamic Unpacker.sln"
     
     - name: Build solution
-      run: msbuild "ConfuserEx Unpacker/ConfuserEx Unpacker.sln" -t:rebuild -property:Configuration=Release -property:AllowUnsafeBlocks=True
+      run: msbuild "ConfuserEx Dynamic Unpacker.sln" -t:rebuild -property:Configuration=Release -property:AllowUnsafeBlocks=True
 
     - uses: actions/upload-artifact@v3
       if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')
       with:
         name: confuser-unpacker2
-        path: "ConfuserEx Unpacker/ConfuserEx Unpacker"
+        path: "ConfuserEx Dynamic Unpacker"
