@@ -30,7 +30,7 @@ jobs:
       run: nuget restore "ConfuserEx Dynamic Unpacker.sln"
     
     - name: Build solution
-      run: msbuild "ConfuserEx Dynamic Unpacker.sln" -t:rebuild -maxcpucount:4 -property:BuildInParallel=True -property:Configuration=Release -property:AllowUnsafeBlocks=True
+      run: msbuild "ConfuserEx Dynamic Unpacker.sln" /t:de4dot;dnlib -t:rebuild -maxcpucount:4 -property:BuildInParallel=True -property:Configuration=Release -property:AllowUnsafeBlocks=True
 
     - uses: actions/upload-artifact@v3
       if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')
