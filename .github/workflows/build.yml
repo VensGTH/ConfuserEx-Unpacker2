@@ -19,7 +19,7 @@ jobs:
       run: |
         git submodule update --init --recursive
         nuget restore "ConfuserEx Dynamic Unpacker.sln"
-        msbuild "ConfuserEx Dynamic Unpacker.sln" /p:Configuration=Release /m /verbosity:normal /p:WarningLevel=0
+        msbuild "ConfuserEx Dynamic Unpacker.sln" /p:Configuration=Release /m /verbosity:normal /p:WarningLevel=0 -property:AllowUnsafeBlocks=True
     - name: Create ZIP
       if: startsWith(github.ref, 'refs/tags/')
       run: |
