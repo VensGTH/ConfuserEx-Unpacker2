@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.5.33530.505
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfuserEx Dynamic Unpacker", "ConfuserEx Dynamic Unpacker\ConfuserEx Dynamic Unpacker.csproj", "{21E98071-183F-4FD1-AE99-734404274BA6}"
 EndProject
