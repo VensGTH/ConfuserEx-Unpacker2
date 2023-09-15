@@ -5,6 +5,10 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfuserEx Dynamic Unpacker", "ConfuserEx Dynamic Unpacker\ConfuserEx Dynamic Unpacker.csproj", "{21E98071-183F-4FD1-AE99-734404274BA6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dnlib", "dnlib\src\dnlib.csproj", "{FDFC1237-143F-4919-8318-4926901F4639}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "de4dot", "de4dot\de4dot\de4dot.csproj", "{004EB657-252C-4361-A2D2-2E514130C7FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
