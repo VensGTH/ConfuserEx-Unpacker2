@@ -25,8 +25,8 @@ jobs:
         nuget restore "ConfuserEx Dynamic Unpacker.sln"
     
     - name: Build
-      run: msbuild "ConfuserEx Dynamic Unpacker.sln" -t:rebuild -property:Configuration=Release -property:AllowUnsafeBlocks=True
-    - name: Create ZIP
+      run: msbuild "ConfuserEx Dynamic Unpacker.sln" -t:rebuild /m -property:Configuration=Release -property:WarningLevel=0 -property:AllowUnsafeBlocks=True
+    - name: Create ZIP 
       if: startsWith(github.ref, 'refs/tags/')
       run: |
         Compress-Archive -Path Release/* -DestinationPath "ConfuserEx-Dynamic-Unpacker"
